@@ -1,0 +1,25 @@
+    
+class Main
+{
+   function void main()
+   {
+		var Hangman game;
+		var int j;
+		
+		let j = 0;
+		while (j < 10)
+		{
+			let game = Hangman.new(j);
+			do game.run();
+			do Screen.clearScreen();
+			let j = j + 1;
+			do Output.moveCursor(0, 0);
+			
+		}
+		do Output.printString("Se ha acabado el juego!");
+		do game.dispose();
+	    return;
+   	}	
+}
+
+

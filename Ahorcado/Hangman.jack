@@ -1,0 +1,203 @@
+class Hangman
+{
+   field String solucion;
+   field String intentosAcertados;
+   static int vecesAdivinadas;
+
+   //Constructor del programa
+   constructor Hangman new(int j)
+   { 
+      var int i, turno;
+      let i = 0;
+      let turno = j + 1;
+
+      if(j = 0) { let solucion = "ADIVINAR"; }
+      if(j = 1) { let solucion = "GRAFICOS"; }
+      if(j = 2) { let solucion = "COMPILADOR"; }
+      if(j = 3) { let solucion = "ORGANIZACION"; }
+      if(j = 4) { let solucion = "LONGITUD"; }
+      if(j = 5) { let solucion = "EMULADOR"; }
+      if(j = 6) { let solucion = "PUBLICAR"; }
+      if(j = 7) { let solucion = "PROGRAMA"; }
+      if(j = 8) { let solucion = "COMPUTADOR"; }
+      if(j = 9) { let solucion = "ASEMBLER"; }
+
+      let intentosAcertados = String.new(solucion.length());
+      while(i < (solucion.length()))
+      {
+         let intentosAcertados = intentosAcertados.appendChar(219);
+         let i = i+1; 
+      }
+
+      do Output.printString("Juego del Ahorcado        ");
+      do Output.printString("      Palabras Correctas: ");
+      do Output.printInt(vecesAdivinadas);
+      do Output.println();
+      do Output.printString("Turno: ");
+      do Output.printInt(turno);
+      do Output.println();
+      do Output.printString("Intentos de adivinar:");
+      do Output.println();
+      return this;
+   }
+   
+   //Empieza y corre el juego
+   method void run()
+   {
+      var boolean finJuego;
+      var int linea, intentosFallados;
+
+      var char adivinar;
+      var char continuar;
+       
+      let intentosFallados = 0;
+      let linea = 3; 
+      let finJuego = 0;
+      do drawHangPost();
+      
+      while(~(finJuego))
+      {
+         do Output.printString(intentosAcertados);
+         do Output.moveCursor(linea,15);
+         let linea = linea +1;
+         let adivinar = Keyboard.readChar();
+         do Output.println();
+         if(~(esCorrecto(adivinar)))
+         {
+            if(intentosFallados = 0)
+            {
+               do dibujaCabeza();
+            }
+            if(intentosFallados = 1)
+            {
+               do dibujaTorso();
+            }
+            if(intentosFallados = 2)
+            {
+               do dibujaBrazoDer();
+            }
+            if(intentosFallados = 3)
+            {
+               do dibujaBrazoIzq();
+            }
+            if(intentosFallados = 4)
+            {
+               do dibujaPiernaDer();
+            }
+            if(intentosFallados = 5)
+            {
+               do dibujaPiernaIzq();
+               do Output.println();
+               do Output.printString("GAME OVER!");
+               do Output.println();
+               do Output.printString("Presione cualquier tecla");
+               do Output.println();
+               do Output.printString("para continuar");
+               let finJuego = -1;
+               let continuar = Keyboard.readChar();
+            }
+            let intentosFallados = intentosFallados +1; 
+         }
+         if(Victoria())
+         {
+            do Output.println();
+            do Output.printString("Correcto! Ganaste!");
+            do Output.println();
+            do Output.printString("Presione cualquier tecla");
+            do Output.println();
+            do Output.printString("para continuar");
+            let vecesAdivinadas = vecesAdivinadas + 1;
+            let finJuego = -1;
+            let continuar = Keyboard.readChar();
+            
+         }
+      }
+      return;
+   }
+   
+   //Chequea la condicion de victoria
+   method boolean Victoria()
+   {
+      var int i;
+      let i = 0;
+      while(i < intentosAcertados.length())
+      {
+         if(intentosAcertados.charAt(i) = 219)
+         {
+            return 0; 
+         }
+         let i = i+1;
+      }
+      return -1; 
+   }
+   
+   //Verifica la palabra en el transcurso del juego
+   method boolean esCorrecto(char adivinar)
+   { 
+      var int i, k;
+      let i = 0;
+      let k = 0;
+      while(i < solucion.length())
+      {
+         if(adivinar = solucion.charAt(i))
+         {
+            do intentosAcertados.setCharAt(i, adivinar);
+            let k = k + 1;
+         }
+         let i=i+1;
+      }
+      if ( k > 0 ) { return -1; }
+      return 0;
+   }
+   
+   //Default del ahorcado
+   method void drawHangPost()
+   { 
+      do Screen.setColor(true);
+      do Screen.drawRectangle(350, 200, 450, 210);
+      do Screen.drawRectangle(395,50,405,200);
+      do Screen.drawRectangle(300,40,405,50);
+      do Screen.drawRectangle(300,40,310,70);
+      return;
+   }
+   
+   //Funciones para dibujar las distintas piezas
+   method void dibujaCabeza()
+   {
+      do Screen.drawCircle(305,90,20);
+      return;
+   }
+   method void dibujaTorso()
+   {
+      do Screen.drawLine(305,110, 305, 160);
+      return;
+   }
+   method void dibujaBrazoDer()
+   {
+      do Screen.drawLine(305,135, 320, 120);
+      return;
+   }
+
+   method void dibujaBrazoIzq()
+   {
+      do Screen.drawLine(305,135, 290, 120);
+      return;
+   }
+   method void dibujaPiernaDer()
+   {
+      do Screen.drawLine(305,160, 325, 180);
+      return;
+   }
+   method void dibujaPiernaIzq()
+   {
+      do Screen.drawLine(305,160, 285, 180);
+      return;
+   }
+
+   //Deallocate Object in Memory.
+   method void dispose()
+   {
+     do Memory.deAlloc(this);
+     return;
+   }
+}
